@@ -1,4 +1,5 @@
 // app/routes.js
+var Evernote = require('evernote');
 module.exports = function(app, passport) {
 
     // =====================================
@@ -29,10 +30,10 @@ module.exports = function(app, passport) {
       passport.authenticate('evernote'));
 
     app.get('/auth/evernote/callback', 
-      passport.authenticate('evernote', { failureRedirect: '/login' }),
+      passport.authenticate('evernote', { failureRedirect: '/' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/');
+        res.redirect('/profile');
       });
 
     // =====================================
@@ -54,8 +55,21 @@ module.exports = function(app, passport) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-        res.render('profile.ejs', {
-            user : req.user // get the user out of session and pass to template
+
+        var authenticatedClient = new Evernote.Client({
+          token: req.user.token,
+          sandbox: true,
+          china: false,
+        });
+        var noteStore = authenticatedClient.getNoteStore();
+        noteStore.listNotebooks().then(function(notebooks) {
+            return noteStore.findNotesMetadata({notebookGuid:'3c3613fe-1d44-4e40-a79c-b7e81578b4f9'},0,250,{includeTitle:true});            
+        }).then(function(notes){
+            console.log(notes);
+            res.render('profile.ejs', {
+                user : req.user,
+                notebooks: notes // get the user out of session and pass to template
+            });
         });
     });
 
