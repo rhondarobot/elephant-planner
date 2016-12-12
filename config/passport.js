@@ -51,8 +51,8 @@ module.exports = function(passport) {
         requestTokenURL: 'https://sandbox.evernote.com/oauth',
         accessTokenURL: 'https://sandbox.evernote.com/oauth',
         userAuthorizationURL: 'https://sandbox.evernote.com/OAuth.action',
-        consumerKey: 'rhonda',
-        consumerSecret: '63f07416743f18db',
+        consumerKey: 'rhonda-3605',
+        consumerSecret: '47299cd28f534d36',
         callbackURL: "http://localhost:8080/auth/evernote/callback"
     },
     function(token, tokenSecret, profile, cb) {
