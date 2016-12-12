@@ -65,11 +65,14 @@ module.exports = function(app, passport) {
         noteStore.listNotebooks().then(function(notebooks) {
             return noteStore.findNotesMetadata({notebookGuid:'3c3613fe-1d44-4e40-a79c-b7e81578b4f9'},0,250,{includeTitle:true});            
         }).then(function(notes){
-            console.log(notes);
-            res.render('profile.ejs', {
-                user : req.user,
-                notebooks: notes // get the user out of session and pass to template
-            });
+                console.log(notes);
+                res.render('profile.ejs', {
+                    user : req.user,
+                    notebooks: notes.notes // get the user out of session and pass to template
+                });
+        }).catch(function(error){
+          console.error(error,'Promise error');
+          res.send('error');
         });
     });
 
