@@ -63,7 +63,7 @@ module.exports = function(app, passport) {
         });
         var noteStore = authenticatedClient.getNoteStore();
         noteStore.listNotebooks().then(function(notebooks) {
-            return noteStore.findNotesMetadata({notebookGuid:'3c3613fe-1d44-4e40-a79c-b7e81578b4f9'},0,250,{includeTitle:true});            
+            return noteStore.findNotesMetadata({notebookGuid:notebooks[0].guid},0,250,{includeTitle:true});            
         }).then(function(notes){
                 console.log(notes);
                 res.render('profile.ejs', {
