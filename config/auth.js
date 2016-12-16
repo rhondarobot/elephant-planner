@@ -1,4 +1,4 @@
-var callbackUrl = "http://localhost:3000/oauth_callback"; // your endpoint
+var callbackUrl = "http://localhost:8080/oauth_callback"; // your endpoint
 
 // initialize OAuth
 var Evernote = require('evernote');

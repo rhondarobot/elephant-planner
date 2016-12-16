@@ -77,6 +77,12 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
+    // NOTEBOOK SECTION ====================
+    // =====================================
+    app.get('/agenda', function(req, res) {
+        res.render('agenda.ejs', {message: 'Success: Evernote Planner!'});
+    });
+    // =====================================
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {

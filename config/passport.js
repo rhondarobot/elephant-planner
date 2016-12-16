@@ -1,11 +1,10 @@
 // config/passport.js
 
 // load all the things we need
-<<<<<<< HEAD
-var evernoteStrategy   = require('passport-evernote').Strategy;//evernoteStrategy (passport.use replace with first code and add the 2 routes--login: auth/evernote)
-=======
+
+
 var EvernoteStrategy   = require('passport-evernote');//evernoteStrategy (passport.use replace with first code and add the 2 routes--login: auth/evernote)
->>>>>>> 4f1ad8bf5206a4c13646d747859680b2491557f1
+
 
 // load up the user model
 var User            = require('../app/models/user');
