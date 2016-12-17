@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div class="notes"><% for(var i = 0; i < notes.length; i++){ %>
-                <p><a href='/notes/<%= notes[i].guid %>/<%= notes[i].withContent %>'><%= notes[i].title %></a></p></div>
+                <p><%= notes[i].guid %>/<%= notes[i].resultSpec %>'><%= notes[i].title %></p></div>
 
 </body>
 </html>

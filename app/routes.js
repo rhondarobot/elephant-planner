@@ -124,12 +124,12 @@ module.exports = function(app, passport) {
           sandbox: true,
           china: false,
         });
-        var getNoteStore = authenticatedClient.getNoteStore();
-        getNoteStore.getNoteWithResultSpec({
-            guid:req.params.guid,
-            withContent: true
+        var getNoteWithResultSpec = authenticatedClient.getNoteStore();
+        getNoteWithResultSpec.NoteResultSpec({
+            includeContent: true,
+            includeResourcesData: true,
+            includeNoteAppDataValues: true
         });
-            console.log(req.params.guid);
             res.render('notes.ejs');
     });
     
