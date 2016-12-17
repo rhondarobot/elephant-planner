@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Note Content</title>
+</head>
+<body>
+	<div class="notes"><% for(var i = 0; i < notes.length; i++){ %>
+                <p><a href='/notes/<%= notes[i].guid %>/<%= notes[i].withContent %>'><%= notes[i].title %></a></p></div>
+
+</body>
+</html>

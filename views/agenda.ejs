@@ -6,12 +6,19 @@
 </head>
 <body>
 	<h1> Welcome to your Evernote Planner! </h1>
-	<div class="all-notebooks">
+		<img src="/..images/OI2O5S0.jpg" alt="christmas background with lights" style="width:304px;height:228px;">
 		<h3>Notebooks</h3>
+		 <div class="col-sm-6">
+            <% for(var i = 0; i < notebooks.length; i++){ %>
+                <p><a href='/notebook/<%= notebooks[i].guid %>/<%= notebooks[i].name %>'><%= notebooks[i].name %></a></p>
+            <% } %>
+        </div>
             
 	</div>
 	<div class="current-notebooks"></div>
 	<div class="search-notebooks"></div>
+	<div class="background-credit"><a href='http://www.freepik.com/free-vector/christmas-background-design_995420.htm'></a></div>
+	<div class="all-notebooks">
 
 </body>
 </html>

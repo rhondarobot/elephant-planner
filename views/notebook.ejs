@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Evernote Planner</title>
+</head>
+<body>
+	<h1> Welcome to your Evernote Planner! </h1>
+	<div class="all-notebooks">
+		<h3><%= title %></h3>
+		 <div class="col-sm-6">
+            <h3>Notes</h3>
+            <% for(var i = 0; i < notes.length; i++){ %>
+                <p><a href='/notes/<%= notes[i].guid %>/<%= notes[i].title %>'><%= notes[i].title %></a></p>
+            <% } %>
+        </div>
+              
+	</div>
+	<div class="current-notebooks"></div>
+	<div class="search-notebooks"></div>
+
+</body>
+</html>

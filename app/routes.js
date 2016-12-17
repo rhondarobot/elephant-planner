@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
       passport.authenticate('evernote', { failureRedirect: '/' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/profile');
+        res.redirect('/agenda');
       });
 
     // =====================================
@@ -54,7 +54,13 @@ module.exports = function(app, passport) {
     // =====================================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
+
+    /* in the agenda route, we would loop through all of the notebooks and find 
+        the notebook whose title is EvernotePlanner.
+        Grab the notes from that notebook
+
+    */
+    app.get('/agenda', isLoggedIn, function(req, res) {
 
         var authenticatedClient = new Evernote.Client({
           token: req.user.token,
@@ -62,13 +68,21 @@ module.exports = function(app, passport) {
           china: false,
         });
         var noteStore = authenticatedClient.getNoteStore();
+        var notebookList = notebookList;
+        var epGUID = 'bcb2e5cf-8975-412e-a71c-73d57d332e06';
         noteStore.listNotebooks().then(function(notebooks) {
-            return noteStore.findNotesMetadata({notebookGuid:notebooks[0].guid},0,250,{includeTitle:true});            
+            evernotePlanner = notebooks;
+            // loop over each notebook, find EvernotePlanner, set epGUID to it's guid
+            // do the following line, but change notebooks[0].guid to epGUID
+            return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
         }).then(function(notes){
+                // 
                 console.log(notes);
-                res.render('profile.ejs', {
+                // find the note that matches today's date in the format of YYYY-mm-dd
+                res.render('agenda.ejs', {
                     user : req.user,
-                    notebooks: notes.notes // get the user out of session and pass to template
+                    notes: notes.notes,
+                    notebooks: evernotePlanner
                 });
         }).catch(function(error){
           console.error(error,'Promise error');
@@ -76,32 +90,74 @@ module.exports = function(app, passport) {
         });
     });
 
+    // code for reading notes into events
+    /*
+    var line = '09:00-10:00 || Thinkful Session with TJ || We are meeting here';
+    var eventItems = line.split(' || ');
+    eventItems[0]; //09:00-10:00 - The time
+    eventItems[1]; //Thinkful Session with TJ - the event title
+    eventItems[2]; //We are meeting here... - the event details
+    */
+
+    app.get('/notebook/:guid/:title', isLoggedIn, function(req, res){
+        var authenticatedClient = new Evernote.Client({
+          token: req.user.token,
+          sandbox: true,
+          china: false,
+        });
+        var noteStore = authenticatedClient.getNoteStore();
+        noteStore.findNotesMetadata({notebookGuid:req.params.guid},0,250,{includeTitle:true}).then(function(notes){
+            console.log(notes);
+            res.render('notebook.ejs', {
+                user : req.user,
+                notes: notes.notes,
+                title: req.params.title
+            });
+        }).catch(function(error){
+          console.error(error,'Promise error');
+          res.send('error');
+        });
+    });      
+    app.get('/notes/:resultSpec', isLoggedIn, function(req,res){
+        var authenticatedClient = new Evernote.Client({
+          token: req.user.token,
+          sandbox: true,
+          china: false,
+        });
+        var getNoteStore = authenticatedClient.getNoteStore();
+        getNoteStore.getNoteWithResultSpec({
+            guid:req.params.guid,
+            withContent: true
+        });
+            console.log(req.params.guid);
+            res.render('notes.ejs');
+    });
+    
+
     // =====================================
     // NOTEBOOK SECTION ====================
     // =====================================
-    app.get('/agenda', function(req, res) {
-        res.render('agenda.ejs', {message: 'Success: Evernote Planner!'});
-    });
+   
     // =====================================
     // LOGOUT ==============================
     // =====================================
-    app.get('/logout', function(req, res) {
+    app.get('/logout', function(req,res) {
         req.logout();
         res.redirect('/');
     });
        // process the signup form
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // app.post('/signup', passport.authenticate('local-signup', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/signup', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 
  // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+    // app.post('/login', passport.authenticate('local-login', {
+    //     successRedirect : '/profile', // redirect to the secure profile section
+    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
+    //     failureFlash : true // allow flash messages
+    // }));
 };
 
 
