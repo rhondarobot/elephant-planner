@@ -16,6 +16,11 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+
+
+// parsing ejs Errors ==========================================================
+
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
@@ -25,7 +30,7 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
-
+app.use(express.static('views')); //access images
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport

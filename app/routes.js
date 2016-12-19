@@ -33,7 +33,9 @@ module.exports = function(app, passport) {
       passport.authenticate('evernote', { failureRedirect: '/' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/agenda');
+        var day = new Date();
+        var today = day.getFullYear() + '-' + (day.getMonth()+1) + '-' + day.getDate();
+        res.redirect('/agenda/'+today);
       });
 
     // =====================================
@@ -60,7 +62,7 @@ module.exports = function(app, passport) {
         Grab the notes from that notebook
 
     */
-    app.get('/agenda', isLoggedIn, function(req, res) {
+    app.get('/agenda/:date', isLoggedIn, function(req, res) {
 
         var authenticatedClient = new Evernote.Client({
           token: req.user.token,
@@ -68,24 +70,61 @@ module.exports = function(app, passport) {
           china: false,
         });
         var noteStore = authenticatedClient.getNoteStore();
-        var notebookList = notebookList;
-        var epGUID = 'bcb2e5cf-8975-412e-a71c-73d57d332e06';
+        var todaysNote;
+        var noteGUID;
+        var epGUID;
         noteStore.listNotebooks().then(function(notebooks) {
-            evernotePlanner = notebooks;
+            for (var i = 0; i < notebooks.length; i++) {
+                if(notebooks[i].name == 'Evernote Planner'){
+                    epGUID = notebooks[i].guid;
+                }
+            }
+            console.log('epguid',epGUID);
             // loop over each notebook, find EvernotePlanner, set epGUID to it's guid
             // do the following line, but change notebooks[0].guid to epGUID
             return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
         }).then(function(notes){
                 // 
-                console.log(notes);
+                for (var i = 0; i < notes.notes.length; i++) {
+                    console.log(notes.notes[i].title);
+                    if(notes.notes[i].title == req.params.date){
+                        console.log('yes');
+                        noteGUID = notes.notes[i].guid;
+                    } else {
+                        console.log('no');
+                    }
+                }
+                console.log('noteID',noteGUID);
+                /*
+                Types.Note getNoteWithResultSpec(string authenticationToken,
+                                                 Types.Guid guid,
+                                                 NoteResultSpec resultSpec)
+                    throws Errors.EDAMUserException, Errors.EDAMSystemException, Errors.EDAMNotFoundException
+                Returns the current state of the note in the service with the provided GUID. The ENML contents of the note will only be provided if the 'withContent' parameter is true. The service will include the meta-data for each resource in the note, but the binary contents of the resources and their recognition data will be omitted. If the Note is found in a public notebook, the authenticationToken will be ignored (so it could be an empty string). The applicationData fields are returned as keysOnly.
+                @param  authenticationToken An authentication token that grants the caller access to the requested note.
+
+                @param  guid The GUID of the note to be retrieved.
+
+                @param  resultSpec A structure specifying the fields of the note that the caller would like to get.
+
+                @throws  EDAMUserException
+
+                BAD_DATA_FORMAT "Note.guid" - if the parameter is missing
+                PERMISSION_DENIED "Note" - private note, user doesn't own
+                @throws  EDAMNotFoundException
+
+                "Note.guid" - not found, by GUID
+                */
+                return noteStore.getNoteWithResultSpec(noteGUID,{includeContent:true});
+        }).then(function(note){
                 // find the note that matches today's date in the format of YYYY-mm-dd
                 res.render('agenda.ejs', {
                     user : req.user,
-                    notes: notes.notes,
-                    notebooks: evernotePlanner
+                    note: note,
+                    date: req.params.date
                 });
         }).catch(function(error){
-          console.error(error,'Promise error');
+          console.error(error);
           res.send('error');
         });
     });

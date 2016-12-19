@@ -6,12 +6,12 @@
 </head>
 <body>
 	<h1> Welcome to your Evernote Planner! </h1>
-		<img src="/..images/OI2O5S0.jpg" alt="christmas background with lights" style="width:304px;height:228px;">
-		<h3>Notebooks</h3>
-		 <div class="col-sm-6">
-            <% for(var i = 0; i < notebooks.length; i++){ %>
-                <p><a href='/notebook/<%= notebooks[i].guid %>/<%= notebooks[i].name %>'><%= notebooks[i].name %></a></p>
-            <% } %>
+		<img src="/images/merrychristmas.jpg" alt="christmas background with lights" style="width:304px;height:228px;">
+		<h3><%= date%> Notes</h3>
+		<%= Object.keys(note) %>
+		<div class="col-sm-6">
+        	<%= note.content %>   
+        	
         </div>
             
 	</div>
