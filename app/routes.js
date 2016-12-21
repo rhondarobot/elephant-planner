@@ -1,5 +1,6 @@
 // app/routes.js
 var Evernote = require('evernote');
+// var ejsLint=require('./server.js');
 module.exports = function(app, passport) {
 
     // =====================================
@@ -62,120 +63,53 @@ module.exports = function(app, passport) {
         Grab the notes from that notebook
 
     */
+
+    app.post('/event', function(req,res){
+        getNote(req.user,req.body.date,function(note){
+            var newEvent = "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
+            var result = note.content.match(/<ul(.*?)<\/ul>/g).map(function(val){
+               return val.replace(/<\/ul>/g,newEvent+'</ul>');
+            });
+            note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
+
+            saveNote(req.user,note, function(data){
+                console.log(data);
+                res.redirect('/agenda/'+req.body.date);
+            });
+        });
+    });
+
     app.get('/agenda/:date', isLoggedIn, function(req, res) {
 
-        var authenticatedClient = new Evernote.Client({
-          token: req.user.token,
-          sandbox: true,
-          china: false,
-        });
-        var noteStore = authenticatedClient.getNoteStore();
-        var todaysNote;
-        var noteGUID;
-        var epGUID;
-        noteStore.listNotebooks().then(function(notebooks) {
-            for (var i = 0; i < notebooks.length; i++) {
-                if(notebooks[i].name == 'Evernote Planner'){
-                    epGUID = notebooks[i].guid;
+        getNote(req.user,req.params.date,function(note){
+            var lines = note.content.split(/<.*?>/);
+            var events = [];
+            for (var i = 0; i < lines.length; i++) {
+                if(lines[i]!==""){
+                    var pieces = lines[i].split(" || ");
+                    var times = pieces[0].split(" - ");
+                    var event = {
+                        start: times[0],
+                        end: times[1],
+                        title: pieces[1],
+                        description: (pieces.length > 2) ? pieces[2] : ''
+                    };
+                    events.push(event);
                 }
             }
-            console.log('epguid',epGUID);
-            // loop over each notebook, find EvernotePlanner, set epGUID to it's guid
-            // do the following line, but change notebooks[0].guid to epGUID
-            return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
-        }).then(function(notes){
-                // 
-                for (var i = 0; i < notes.notes.length; i++) {
-                    console.log(notes.notes[i].title);
-                    if(notes.notes[i].title == req.params.date){
-                        console.log('yes');
-                        noteGUID = notes.notes[i].guid;
-                    } else {
-                        console.log('no');
-                    }
-                }
-                console.log('noteID',noteGUID);
-                /*
-                Types.Note getNoteWithResultSpec(string authenticationToken,
-                                                 Types.Guid guid,
-                                                 NoteResultSpec resultSpec)
-                    throws Errors.EDAMUserException, Errors.EDAMSystemException, Errors.EDAMNotFoundException
-                Returns the current state of the note in the service with the provided GUID. The ENML contents of the note will only be provided if the 'withContent' parameter is true. The service will include the meta-data for each resource in the note, but the binary contents of the resources and their recognition data will be omitted. If the Note is found in a public notebook, the authenticationToken will be ignored (so it could be an empty string). The applicationData fields are returned as keysOnly.
-                @param  authenticationToken An authentication token that grants the caller access to the requested note.
 
-                @param  guid The GUID of the note to be retrieved.
+            // sort our events by start time
+            events.sort(keysrt('start'));
 
-                @param  resultSpec A structure specifying the fields of the note that the caller would like to get.
-
-                @throws  EDAMUserException
-
-                BAD_DATA_FORMAT "Note.guid" - if the parameter is missing
-                PERMISSION_DENIED "Note" - private note, user doesn't own
-                @throws  EDAMNotFoundException
-
-                "Note.guid" - not found, by GUID
-                */
-                return noteStore.getNoteWithResultSpec(noteGUID,{includeContent:true});
-        }).then(function(note){
-                // find the note that matches today's date in the format of YYYY-mm-dd
-                res.render('agenda.ejs', {
-                    user : req.user,
-                    note: note,
-                    date: req.params.date
-                });
-        }).catch(function(error){
-          console.error(error);
-          res.send('error');
-        });
-    });
-
-    // code for reading notes into events
-    /*
-    var line = '09:00-10:00 || Thinkful Session with TJ || We are meeting here';
-    var eventItems = line.split(' || ');
-    eventItems[0]; //09:00-10:00 - The time
-    eventItems[1]; //Thinkful Session with TJ - the event title
-    eventItems[2]; //We are meeting here... - the event details
-    */
-
-    app.get('/notebook/:guid/:title', isLoggedIn, function(req, res){
-        var authenticatedClient = new Evernote.Client({
-          token: req.user.token,
-          sandbox: true,
-          china: false,
-        });
-        var noteStore = authenticatedClient.getNoteStore();
-        noteStore.findNotesMetadata({notebookGuid:req.params.guid},0,250,{includeTitle:true}).then(function(notes){
-            console.log(notes);
-            res.render('notebook.ejs', {
+            res.render('agenda.ejs', {
                 user : req.user,
-                notes: notes.notes,
-                title: req.params.title
+                note: note,
+                date: req.params.date,
+                events: events
             });
-        }).catch(function(error){
-          console.error(error,'Promise error');
-          res.send('error');
         });
-    });      
-    app.get('/notes/:resultSpec', isLoggedIn, function(req,res){
-        var authenticatedClient = new Evernote.Client({
-          token: req.user.token,
-          sandbox: true,
-          china: false,
-        });
-        var getNoteWithResultSpec = authenticatedClient.getNoteStore();
-        getNoteWithResultSpec.NoteResultSpec({
-            includeContent: true,
-            includeResourcesData: true,
-            includeNoteAppDataValues: true
-        });
-            res.render('notes.ejs');
-    });
-    
 
-    // =====================================
-    // NOTEBOOK SECTION ====================
-    // =====================================
+    });
    
     // =====================================
     // LOGOUT ==============================
@@ -184,19 +118,6 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
-       // process the signup form
-    // app.post('/signup', passport.authenticate('local-signup', {
-    //     successRedirect : '/profile', // redirect to the secure profile section
-    //     failureRedirect : '/signup', // redirect back to the signup page if there is an error
-    //     failureFlash : true // allow flash messages
-    // }));
-
- // process the login form
-    // app.post('/login', passport.authenticate('local-login', {
-    //     successRedirect : '/profile', // redirect to the secure profile section
-    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
-    //     failureFlash : true // allow flash messages
-    // }));
 };
 
 
@@ -210,4 +131,55 @@ function isLoggedIn(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/');
+}
+
+function keysrt(key,desc) {
+  return function(a,b){
+   return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+  };
+}
+
+function saveNote(user,note,cb){
+    var authenticatedClient = new Evernote.Client({
+      token: user.token,
+      sandbox: true,
+      china: false,
+    });
+    var noteStore = authenticatedClient.getNoteStore();
+    noteStore.updateNote(note).then(function(data){
+        cb(data);
+    });
+}
+
+function getNote(user,date,cb){
+    var authenticatedClient = new Evernote.Client({
+          token: user.token,
+          sandbox: true,
+          china: false,
+        });
+    var noteStore = authenticatedClient.getNoteStore();
+    var todaysNote;
+    var noteGUID;
+    var epGUID;
+    noteStore.listNotebooks().then(function(notebooks) {
+        for (var i = 0; i < notebooks.length; i++) {
+            if(notebooks[i].name == 'Evernote Planner'){
+                epGUID = notebooks[i].guid;
+            }
+        }
+        return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
+    }).then(function(notes){
+            for (var i = 0; i < notes.notes.length; i++) {
+                if(notes.notes[i].title == date){
+                    noteGUID = notes.notes[i].guid;
+                } else {
+                }
+            }
+            return noteStore.getNoteWithResultSpec(noteGUID,{includeContent:true});
+    }).then(function(note){
+            cb(note);
+    }).catch(function(error){
+      console.error(error);
+      res.send('error');
+    });
 }

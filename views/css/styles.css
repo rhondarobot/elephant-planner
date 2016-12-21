@@ -1,0 +1,22 @@
+.event {
+    background-color: lightblue;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 10px 0;
+    font-family: sans-serif;
+}
+
+.event h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.event h4 {
+    margin: 5px 0;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.event p {
+    margin-bottom: 0;
+}

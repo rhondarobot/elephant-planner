@@ -1,23 +1,47 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Evernote Planner</title>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
-<body> -->
+<body>
 	<h1> Welcome to your Evernote Planner! </h1>
 		<img src="/images/merrychristmas.jpg" alt="christmas background with lights" style="width:304px;height:228px;">
 		<h3><%= date%> Notes</h3>
-		<%= Object.keys(note) %>
+		<form method="post" action="/event" class="planner-notes">
+			<input type="hidden" name="date" value="<%=date%>" />
+			<p>
+				<label for="start">Start Time:</label>
+				<input type="text" id="start" name="start" placeholder="0000"/>
+			</p><p>
+				<label for="end">End Time:</label>
+				<input type="text" id="end" name="end" placeholder="0000"/>
+			</p><p>
+				<label for="title">Title:</label>
+				<input type="text" id="title" name="title" placeholder="Event Name"/>
+			</p><p>
+				<label for="description">Description</label>
+				<input type="text" id="description" name="description" placeholder="Description"/>
+			</p>
+			<p><input type="submit" value="Add" name="submit" id="submit"/></p>
+		</form>
 		<div class="col-sm-6">
-        	<%= note.content %> 
+        
         </div>
-            
-<!-- 	</div>
+        <div class="format">
+        	<% for(var i = 0; i < events.length; i++){ %>
+				<div class="event">
+					<h3><%=events[i].title%></h3>
+					<h4><%=events[i].start%> - <%=events[i].end%></h4>
+					<p><%=events[i].description%></p>
+				</div>
+        	<% } %>
+		</div>
 	<div class="current-notebooks"></div>
 	<div class="search-notebooks"></div>
 	<div class="background-credit"><a href='http://www.freepik.com/free-vector/christmas-background-design_995420.htm'></a></div>
 	<div class="all-notebooks">
 
 </body>
-</html> -->
+</html>
