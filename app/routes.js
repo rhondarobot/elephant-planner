@@ -1,5 +1,5 @@
 // app/routes.js
-var Evernote = require('evernote');
+const Evernote = require('evernote');
 // var ejsLint=require('./server.js');
 module.exports = function(app, passport) {
 

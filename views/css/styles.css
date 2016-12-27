@@ -1,3 +1,13 @@
+h1 {
+    color: rgb(111, 181, 54);
+    text-align: center;
+}
+
+.date-title {
+    color: rgb(111, 181, 54);
+    text-align: center;
+    text-decoration: underline;
+}
 .event {
     background-color: lightblue;
     padding: 5px;
@@ -21,6 +31,19 @@
     margin-bottom: 0;
 }
 
-.form {
-    background-image: url('../../views/images/hotcocoa.jpg');
+.planner-notes {
+    background-image: url('/images/hotcocoa.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 400px;
+    width: 500px;
+    padding: 20px;
+    text-align: right;
+    font-size: 25px;
 }
+
+/* .container {
+    display: flex;
+} */
+
+
