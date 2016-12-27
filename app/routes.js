@@ -58,12 +58,6 @@ module.exports = function(app, passport) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
 
-    /* in the agenda route, we would loop through all of the notebooks and find 
-        the notebook whose title is EvernotePlanner.
-        Grab the notes from that notebook
-
-    */
-
     app.post('/event', function(req,res){
         getNote(req.user,req.body.date,function(note){
             var newEvent = "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
@@ -107,9 +101,17 @@ module.exports = function(app, passport) {
                 date: req.params.date,
                 events: events
             });
+
+        // app.put('/agenda/:date',isLoggedIn, function(req,res) {
+        //     getNote(req.user,req.params.date,function(note){
+                
+        //     }) 
+        // })   
         });
 
     });
+
+
    
     // =====================================
     // LOGOUT ==============================
@@ -149,6 +151,7 @@ function saveNote(user,note,cb){
     noteStore.updateNote(note).then(function(data){
         cb(data);
     });
+
 }
 
 function getNote(user,date,cb){

@@ -20,3 +20,7 @@
 .event p {
     margin-bottom: 0;
 }
+
+.form {
+    background-image: url('../../views/images/hotcocoa.jpg');
+}
