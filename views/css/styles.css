@@ -17,14 +17,12 @@ h1 {
 
 .date-title {
     text-align: center;
-    color: rgba(255,255,255,0.9)
-    
 }
 
 .container {
     display: flex;
     border: 5px solid; 
-    min-height: 100vh;
+    min-height: 80vh;
     flex-wrap: wrap;
     flex-direction: row;
     background-image: url('/images/green.jpg');
@@ -84,17 +82,19 @@ input[type=submit] {
 }
 
 ul.pagination {
-    display: inline-block;
-    padding: 0;
-    margin: 0;
+    display: flex;
+    padding: 5px;
+    width: 100%;
+    margin-right: 0;
 }
 
 ul.pagination li {
-    display: inline;
+    list-style-type: none;
+    margin-left: 11vw;
 }
 
 ul.pagination li a {
-    color: black;
+    color: rgb(0,0,0);
     float: left;
     padding: 8px 16px;
     text-decoration: none;
