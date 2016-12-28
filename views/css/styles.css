@@ -67,6 +67,11 @@ h1 {
     margin-bottom: 0;
 }
 
+.editable-time a{
+    color: rgb(255,255,255);
+
+}
+
 .time, .event-title, .event-description {
     height: 35px;
     border-radius: 5px;

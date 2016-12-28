@@ -38,7 +38,7 @@
 		        <div class="format">
 		        	<% for(var i = 0; i < events.length; i++){ %>
 						<div class="event">
-							<h4><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
+							<h4 class="editable-time"><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
 							<h3><%=events[i].title%></h3>
 							<p><%=events[i].description%></p>
 						</div>
