@@ -3,17 +3,21 @@
 }
 
 body {
-    background-image: url('/images/green.jpg');
+    
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 h1 {
     text-align: center;
+    background-size: cover;
+    border-radius: 5px;
+
 }
 
 .date-title {
     text-align: center;
+    color: rgba(255,255,255,0.9)
     
 }
 
@@ -23,6 +27,8 @@ h1 {
     min-height: 100vh;
     flex-wrap: wrap;
     flex-direction: row;
+    background-image: url('/images/green.jpg');
+    background-size: cover;
 
 }
 
@@ -38,14 +44,14 @@ h1 {
 }
 
 .event {
-    background-color: lightgreen;
+    background-color: rgba(144,238,144,0.9);
     padding: 5px;
     box-sizing: border-box;
     margin: 10px 0;
     font-family: sans-serif;
     text-align: center;
     width: 600px;
-    
+    border-radius: 5px;
 }
 
 .event h3 {
@@ -63,9 +69,47 @@ h1 {
     margin-bottom: 0;
 }
 
+.time, .event-title, .event-description {
+    height: 35px;
+    border-radius: 5px;
+    text-align: center;
+}
 
+input[type=submit] {
+    font-size: 20px;
+    border-radius: 7px;
+    background-color:rgba(144,238,144,0.9);
+    cursor: pointer;
+    width: 50%;
+}
 
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
 
+ul.pagination li {
+    display: inline;
+}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+ul.pagination li a:hover:not(.active) {
+    background-color: #ddd;
+}
 
 
 

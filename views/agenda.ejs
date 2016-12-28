@@ -9,40 +9,50 @@
 
 </head>
 <body>
-	<h1> Welcome to your Evernote Planner! </h1>
-		<h3 class="date-title"><%= date%></h3> 
-		<div class="container">
-			<form method="post" action="/event" class="planner-notes">
-				<input type="hidden" name="date" value="<%=date%>" />
-				<p>
-			<!-- <img src="/images/hotcocoa.jpg" alt="christmas background with lights" style="width:304px;height:228px;"> -->
-					<label for="start">Start Time:</label>
-					<input type="text" id="start" name="start" placeholder="0000 (military time)"/>
-				</p><p>
-					<label for="end">End Time:</label>
-					<input type="text" id="end" name="end" placeholder="0000 (military time)"/>
-				</p><p>
-					<label for="title">Title:</label>
-					<input type="text" id="title" name="title" placeholder="Event Name"/>
-				</p><p>
-					<label for="description">Description</label>
-					<input type="text" id="description" name="description" placeholder="Description"/>
-				</p>
-				<p><input type="submit" value="Add" name="submit" id="submit"/></p>
-			</form>
-		<!-- 	<div class="col-sm-6">
-	        
-	        </div> -->
-	        <div class="format">
-	        	<% for(var i = 0; i < events.length; i++){ %>
-					<div class="event">
-						<h4><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
-						<h3><%=events[i].title%></h3>
-						<p><%=events[i].description%></p>
-					</div>
-	        	<% } %>
+	<div class="h1h3">
+		<h1> Welcome to Evernote Planner! </h1>
+			<h3 class="date-title"><%= date %></h3> 
+	</div>	
+			<div class="container">
+				<form method="post" action="/event" class="planner-notes">
+					<input type="hidden" name="date" value="<%=date%>" />
+					<p>
+				<!-- <img src="/images/hotcocoa.jpg" alt="christmas background with lights" style="width:304px;height:228px;"> -->
+						<label for="start">Start Time:</label>
+						<input type="text" id="start" class="time" name="start" placeholder="0000 (military time)"/>
+					</p><p>
+						<label for="end">End Time:</label>
+						<input type="text" id="end" class="time" name="end" placeholder="0000 (military time)"/>
+					</p><p>
+						<label for="title">Title:</label>
+						<input type="text" id="title" class="event-title" name="title" placeholder="Event Name"/>
+					</p><p>
+						<label for="description">Description</label>
+						<input type="text" id="description" class="event-description" name="description" placeholder="Description"/>
+					</p>
+					<p><input type="submit" value="Add" class="event-add" name="submit" id="submit"/></p>
+				</form>
+			<!-- 	<div class="col-sm-6">
+		        
+		        </div> -->
+		        <div class="format">
+		        	<% for(var i = 0; i < events.length; i++){ %>
+						<div class="event">
+							<h4><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
+							<h3><%=events[i].title%></h3>
+							<p><%=events[i].description%></p>
+						</div>
+		        	<% } %>
+				</div>
 			</div>
-		</div>
+		<ul class="pagination">
+		  <li><a href="#">«</a></li>
+		  <li><a href="#">Yesterday</a></li>
+		  <li><a class="active" href="#"><%= date %></a></li>
+		  <li><a href="#">Tomorrow</a></li>
+		  <li><a href="#">»</a></li>
+		</ul>
+</ul>	
 
 </body>
 </html>
