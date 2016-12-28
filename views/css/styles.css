@@ -22,10 +22,11 @@ h1 {
 .container {
     display: flex;
     border: 5px solid; 
-    min-height: 70vh;
+    min-height: 100vh;
     flex-wrap: wrap;
     flex-direction: row;
     background-image: url('/images/green.jpg');
+/*     background-image: url('/images/planner.jpg'); */
     background-size: cover;
     border-radius: 5px;
 }
