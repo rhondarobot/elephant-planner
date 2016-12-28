@@ -22,12 +22,12 @@ h1 {
 .container {
     display: flex;
     border: 5px solid; 
-    min-height: 80vh;
+    min-height: 70vh;
     flex-wrap: wrap;
     flex-direction: row;
     background-image: url('/images/green.jpg');
     background-size: cover;
-
+    border-radius: 5px;
 }
 
 .planner-notes {
@@ -90,7 +90,8 @@ ul.pagination {
 
 ul.pagination li {
     list-style-type: none;
-    margin-left: 11vw;
+    margin-left: 4%;
+    padding-left: 7%;
 }
 
 ul.pagination li a {
