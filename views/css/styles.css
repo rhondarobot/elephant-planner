@@ -4,6 +4,8 @@
 
 body {
     background-image: url('/images/green.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 h1 {
@@ -12,14 +14,33 @@ h1 {
 
 .date-title {
     text-align: center;
-    text-decoration: underline;
+    
 }
+
+.container {
+    display: flex;
+    border: 5px solid; 
+}
+
+.planner-notes {
+/*     background-image: url('/images/hotcocoa.jpg'); */
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 400px;
+    width: 45%;
+    padding: 20px;
+    text-align: right;
+    font-size: 25px;
+    order: 1;
+}
+
 .event {
-    background-color: lightblue;
+    background-color: lightgreen;
     padding: 5px;
     box-sizing: border-box;
     margin: 10px 0;
     font-family: sans-serif;
+    text-align: center;
 }
 
 .event h3 {
@@ -37,25 +58,11 @@ h1 {
     margin-bottom: 0;
 }
 
-.planner-notes {
-    background-image: url('/images/hotcocoa.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 400px;
-    width: 500px;
-    padding: 20px;
-    text-align: right;
-    font-size: 25px;
-    order: 1;
-}
 
-.format {
-    order: 1;
-    background-color: red;
-}
-/* .container {
-    display: flex;
-} */
+
+
+
+
 
 
 
