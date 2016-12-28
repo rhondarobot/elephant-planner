@@ -1,10 +1,16 @@
+* {
+    font-family: 'Roboto', sans-serif, Arial;
+}
+
+body {
+    background-image: url('/images/green.jpg');
+}
+
 h1 {
-    color: rgb(111, 181, 54);
     text-align: center;
 }
 
 .date-title {
-    color: rgb(111, 181, 54);
     text-align: center;
     text-decoration: underline;
 }
@@ -40,10 +46,17 @@ h1 {
     padding: 20px;
     text-align: right;
     font-size: 25px;
+    order: 1;
 }
 
+.format {
+    order: 1;
+    background-color: red;
+}
 /* .container {
     display: flex;
 } */
+
+
 
 

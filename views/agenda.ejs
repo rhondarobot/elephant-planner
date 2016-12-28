@@ -4,10 +4,11 @@
 	<meta charset="UTF-8">
 	<title>Evernote Planner</title>
 	<link rel="stylesheet" href="/css/styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
 	<h1> Welcome to your Evernote Planner! </h1>
-		<h3 class="date-title"><%= date%> Agenda:</h3> 
+		<h3 class="date-title"><%= date%></h3> 
 		<div class="container">
 			<form method="post" action="/event" class="planner-notes">
 				<input type="hidden" name="date" value="<%=date%>" />
@@ -27,9 +28,9 @@
 				</p>
 				<p><input type="submit" value="Add" name="submit" id="submit"/></p>
 			</form>
-			<div class="col-sm-6">
+		<!-- 	<div class="col-sm-6">
 	        
-	        </div>
+	        </div> -->
 	        <div class="format">
 	        	<% for(var i = 0; i < events.length; i++){ %>
 					<div class="event">
