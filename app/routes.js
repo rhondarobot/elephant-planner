@@ -76,29 +76,33 @@ module.exports = function(app, passport) {
     app.get('/agenda/:date', isLoggedIn, function(req, res) {
 
         getNote(req.user,req.params.date,function(note){
-            var lines = note.content.split(/<.*?>/);
             var events = [];
-            for (var i = 0; i < lines.length; i++) {
-                if(lines[i]!==""){
-                    var pieces = lines[i].split(" || ");
-                    var times = pieces[0].split(" - ");
-                    var event = {
-                        start: times[0],
-                        end: times[1],
-                        title: pieces[1],
-                        description: (pieces.length > 2) ? pieces[2] : ''
-                    };
-                    events.push(event);
+            if(note.content){
+                var lines = note.content.split(/<.*?>/);
+                for (var i = 0; i < lines.length; i++) {
+                    if(lines[i]!==""){
+                        var pieces = lines[i].split(" || ");
+                        var times = pieces[0].split(" - ");
+                        var event = {
+                            start: times[0],
+                            end: times[1],
+                            title: pieces[1],
+                            description: (pieces.length > 2) ? pieces[2] : ''
+                        };
+                        events.push(event);
+                    }
                 }
-            }
 
-            // sort our events by start time
-            events.sort(keysrt('start'));
+                // sort our events by start time
+                events.sort(keysrt('start'));
+            }
 
             res.render('agenda.ejs', {
                 user : req.user,
                 note: note,
                 date: req.params.date,
+                yesterday: new Date(req.params.date),
+                today: new Date(),
                 events: events
             });
 
@@ -162,7 +166,7 @@ function getNote(user,date,cb){
         });
     var noteStore = authenticatedClient.getNoteStore();
     var todaysNote;
-    var noteGUID;
+    var noteGUID = 0;
     var epGUID;
     noteStore.listNotebooks().then(function(notebooks) {
         for (var i = 0; i < notebooks.length; i++) {
@@ -175,10 +179,13 @@ function getNote(user,date,cb){
             for (var i = 0; i < notes.notes.length; i++) {
                 if(notes.notes[i].title == date){
                     noteGUID = notes.notes[i].guid;
-                } else {
                 }
             }
-            return noteStore.getNoteWithResultSpec(noteGUID,{includeContent:true});
+            if(noteGUID!==0){
+                return noteStore.getNoteWithResultSpec(noteGUID,{includeContent:true});                
+            } else {
+                return noteStore.createNote({title:date,notebookGuid:epGUID,content:'<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note></en-note>'});
+            }
     }).then(function(note){
             cb(note);
     }).catch(function(error){

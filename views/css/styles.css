@@ -1,3 +1,26 @@
+.container-index {
+    background-image: url('/images/green.jpg');
+    text-align: center;
+    background-position: cover;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 40px;
+    margin-left: 25%;
+    border-radius: 5px;
+    color: rgb(255,255,255);
+}
+
+.btn {
+    color: white;
+    background-color: lightgray;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.jumbotron {
+    font-family: 'Roboto', sans-serif, Arial;
+}
+
 * {
     font-family: 'Roboto', sans-serif, Arial;
 }
@@ -97,7 +120,7 @@ ul.pagination {
 ul.pagination li {
     list-style-type: none;
     margin-left: 4%;
-    padding-left: 7%;
+    padding-left: 18%;
 }
 
 ul.pagination li a {

@@ -5,14 +5,22 @@
 	<title>Evernote Planner</title>
 	<link rel="stylesheet" href="/css/styles.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link href="styles.css" rel="stylesheet" media="all and (max-width: 1024px)">
-
+<!-- 	<link href="styles.css" rel="stylesheet" media="all and (max-width: 1024px)">
+ -->
 </head>
 <body>
 	<div class="h1h3">
 		<h1> Welcome to your Evernote Planner! </h1>
 			<h3 class="date-title">Today is: <%= date %></h3> 
 	</div>	
+				<ul class="pagination">
+				  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
+				  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+		<!-- 		  <li><a href="#">Yesterday</a></li>
+		 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
+		<!-- 		  <li><a href="#">Tomorrow</a></li>
+		 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
+				</ul>
 			<div class="container">
 				<form method="post" action="/event" class="planner-notes">
 					<input type="hidden" name="date" value="<%=date%>" />
@@ -46,11 +54,12 @@
 				</div>
 			</div>
 		<ul class="pagination">
-		  <li><a href="#">«</a></li>
-		  <li><a href="#">Yesterday</a></li>
-		  <li><a class="active" href="#"><%= date %></a></li>
-		  <li><a href="#">Tomorrow</a></li>
-		  <li><a href="#">»</a></li>
+		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
+		  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+<!-- 		  <li><a href="#">Yesterday</a></li>
+ -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
+<!-- 		  <li><a href="#">Tomorrow</a></li>
+ -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
 		</ul>
 </ul>	
 
