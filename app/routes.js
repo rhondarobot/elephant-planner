@@ -61,10 +61,16 @@ module.exports = function(app, passport) {
     app.post('/event', function(req,res){
         getNote(req.user,req.body.date,function(note){
             var newEvent = "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
-            var result = note.content.match(/<ul(.*?)<\/ul>/g).map(function(val){
-               return val.replace(/<\/ul>/g,newEvent+'</ul>');
-            });
-            note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
+
+            var matches = note.content.match(/<ul(.*?)<\/ul>/g);
+            if(matches){
+                var result = matches.map(function(val){
+                   return val.replace(/<\/ul>/g,newEvent+'</ul>');
+                });
+                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
+            } else {
+                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+newEvent+'</en-note>';
+            }
 
             saveNote(req.user,note, function(data){
                 console.log(data);
