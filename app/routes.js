@@ -69,7 +69,7 @@ module.exports = function(app, passport) {
                 });
                 note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
             } else {
-                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+newEvent+'</en-note>';
+                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
             }
 
             saveNote(req.user,note, function(data){
