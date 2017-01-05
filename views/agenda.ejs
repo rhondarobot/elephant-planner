@@ -13,16 +13,31 @@
 		<h1> Welcome to your Evernote Planner! </h1>
 			<h3 class="date-title">Today is: <%= date %></h3> 
 	</div>	
+				
 				<ul class="pagination">
-				  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
-				  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
-		<!-- 		  <li><a href="#">Yesterday</a></li>
-		 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
-		<!-- 		  <li><a href="#">Tomorrow</a></li>
-		 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
-				</ul>
+								  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
+								  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+						<!-- 		  <li><a href="#">Yesterday</a></li>
+						 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
+						<!-- 		  <li><a href="#">Tomorrow</a></li>
+						 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
+								</ul>
+
 			<div class="container">
-				<form method="post" action="/event" class="planner-notes">
+			<!-- Trigger/Open The Modal -->
+			<button id="modal-btn-add">Add Event</button>
+			<button id="modal-btn-edit">Edit Event</button>
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+			    <p>Some text in the Modal..</p>
+			  </div>
+
+			</div>
+				<form method="post" action="/event" class="planner-notes hidden">
 					<input type="hidden" name="date" value="<%=date%>" />
 					<p>
 				<!-- <img src="/images/hotcocoa.jpg" alt="christmas background with lights" style="width:304px;height:228px;"> -->
@@ -52,16 +67,18 @@
 						</div>
 		        	<% } %>
 				</div>
+
+				<ul class="pagination">
+								  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
+								  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+						<!-- 		  <li><a href="#">Yesterday</a></li>
+						 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
+						<!-- 		  <li><a href="#">Tomorrow</a></li>
+						 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
+								</ul>
+				
 			</div>
-		<ul class="pagination">
-		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
-		  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
-<!-- 		  <li><a href="#">Yesterday</a></li>
- -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
-<!-- 		  <li><a href="#">Tomorrow</a></li>
- -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
-		</ul>
-</ul>	
+					
 
 </body>
 </html>

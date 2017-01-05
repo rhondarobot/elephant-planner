@@ -103,12 +103,26 @@ module.exports = function(app, passport) {
                 events.sort(keysrt('start'));
             }
 
+            // var months = ['January','February','March','April','May','June','July',
+            // 'August','September','October','November','December'];       
+            // var tomorrow = new Date();
+            // tomorrow.setTime(tomorrow.getTime() + (1000*3600*24)); 
+            // var yesterday = new Date();
+            // yesterday.setTime(yesterday.getTime() - (1000*3600*24));
+            // document.getElementByClassName("tomorrow").innerHTML = months[tomorrow.getMonth()] + " " + tomorrow.getDate()+ ", " + tomorrow.getFullYear();
+            //     console.log(yesterday);
+            // document.getElementByClassName("yesterday").innerHTML = 
+            // months[yesterday.getMonth()] + " " + yesterday.getDate() + ", " + yesterday.getFullYear();
+            //     console.log(tomorrow);
+
             res.render('agenda.ejs', {
                 user : req.user,
                 note: note,
                 date: req.params.date,
                 yesterday: new Date(req.params.date),
                 today: new Date(),
+                // tomorrow: tomorrow,
+                // months: months,
                 events: events
             });
 
