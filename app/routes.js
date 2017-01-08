@@ -49,14 +49,8 @@ module.exports = function(app, passport) {
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
 
-    // process the signup form
-    // app.post('/signup', do all our passport stuff here);
 
-    // =====================================
-    // PROFILE SECTION =====================
-    // =====================================
-    // we will want this protected so you have to be logged in to visit
-    // we will use route middleware to verify this (the isLoggedIn function)
+// /edit-event post route
 
     app.post('/event', function(req,res){
         getNote(req.user,req.body.date,function(note){
@@ -71,7 +65,6 @@ module.exports = function(app, passport) {
             } else {
                 note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
             }
-
             saveNote(req.user,note, function(data){
                 console.log(data);
                 res.redirect('/agenda/'+req.body.date);
@@ -79,6 +72,28 @@ module.exports = function(app, passport) {
         });
     });
 
+    // app.post('/edit-event', function(req, res){
+    //     getNote(req.user,req.body.date,function(note){
+    //         // var editEvent = function{
+    //         //     for(var s = 0; s < req.body.start; s++) {
+    //         //         for(var e = 0; e < req.)
+    //         // }
+    //         // "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
+
+    //         var matches = note.content.match(/<ul(.*?)<\/ul>/g);
+    //         if(matches){
+    //             var result = matches.map(function(val){
+    //                return val.replace(/<\/ul>/g,newEvent+'</ul>');
+    //             });
+    //             note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
+    //         } else {
+    //             note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
+    //         }
+    //     saveNote(req.user,note, function(data){
+    //         console.log(data);
+    //         res.redirect('/agenda/'+req.body.date);
+    //     });
+    // });
     app.get('/agenda/:date', isLoggedIn, function(req, res) {
 
         getNote(req.user,req.params.date,function(note){
@@ -102,7 +117,11 @@ module.exports = function(app, passport) {
                 // sort our events by start time
                 events.sort(keysrt('start'));
             }
-
+            // var btn = document.getElementByClassName('modal-btn-add'); 
+            //     btn.onclick = function() { 
+            //         modal.style.display = 'block'; 
+            //     }; 
+           
             // var months = ['January','February','March','April','May','June','July',
             // 'August','September','October','November','December'];       
             // var tomorrow = new Date();
@@ -123,14 +142,9 @@ module.exports = function(app, passport) {
                 today: new Date(),
                 // tomorrow: tomorrow,
                 // months: months,
-                events: events
+                events: events,
+                // btn: btn
             });
-
-        // app.put('/agenda/:date',isLoggedIn, function(req,res) {
-        //     getNote(req.user,req.params.date,function(note){
-                
-        //     }) 
-        // })   
         });
 
     });

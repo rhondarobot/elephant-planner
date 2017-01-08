@@ -14,71 +14,84 @@
 			<h3 class="date-title">Today is: <%= date %></h3> 
 	</div>	
 				
-				<ul class="pagination">
-								  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
-								  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
-						<!-- 		  <li><a href="#">Yesterday</a></li>
-						 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
-						<!-- 		  <li><a href="#">Tomorrow</a></li>
-						 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
-								</ul>
+		<ul class="pagination">
+			<li class="prev-day"><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()-1) %>">«</a></li>
+		    <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+		   <!-- <li><a href="#">Yesterday</a> -->
+		   </li>
+		   <li class="today"><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a>
+		   </li>
+		   <!-- <li><a href="#">Tomorrow</a></li>-->
+		 	<li class="next-day"><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+1) %>">»</a>
+		 	</li>
+		</ul>
 
 			<div class="container">
-			<!-- Trigger/Open The Modal -->
-			<button id="modal-btn-add">Add Event</button>
-			<button id="modal-btn-edit">Edit Event</button>
-			<!-- The Modal -->
-			<div id="myModal" class="modal">
+				
+				<!-- Trigger/Open The Modal -->
+				<button class="modal-btn-add">Add Event</button>
+				
+				<!-- The Modal -->
+				<div id="overlay"></div>
+				<div id="myModal" class="modal">
+				
 
-			  <!-- Modal content -->
-			  <div class="modal-content">
-			    <span class="close">&times;</span>
-			    <p>Some text in the Modal..</p>
-			  </div>
+				  <!-- Modal content -->
+				  <div class="modal-content">
+				  <form method="post" action="/event" class="planner-notes hidden">
+				  	<input type="hidden" name="date" value="<%=date%>" />
+				  	<p>
+				    <span class="close">&times;</span>
+				    		<label for="start">Start Time:</label>
+				    		<input type="text" id="start" class="time" name="start" placeholder="0000 (military time)"/>
+				    	</p><p>
+				    		<label for="end">End Time:</label>
+				    		<input type="text" id="end" class="time" name="end" placeholder="0000 (military time)"/>
+				    	</p><p>
+				    		<label for="title">Title:</label>
+				    		<input type="text" id="title" class="event-title" name="title" placeholder="Event Name"/>
+				    	</p><p>
+				    		<label for="description">Description</label>
+				    		<input type="text" id="description" class="event-description" name="description" placeholder="Description"/>
+				    	</p>
+				    	<p><input type="submit" value="Add" class="event-add" name="submit" id="submit"/></p>
+				    	
+				    </form>
+				  </div>
 
-			</div>
-				<form method="post" action="/event" class="planner-notes hidden">
-					<input type="hidden" name="date" value="<%=date%>" />
-					<p>
+				</div>
+				
+						
+					
 				<!-- <img src="/images/hotcocoa.jpg" alt="christmas background with lights" style="width:304px;height:228px;"> -->
-						<label for="start">Start Time:</label>
-						<input type="text" id="start" class="time" name="start" placeholder="0000 (military time)"/>
-					</p><p>
-						<label for="end">End Time:</label>
-						<input type="text" id="end" class="time" name="end" placeholder="0000 (military time)"/>
-					</p><p>
-						<label for="title">Title:</label>
-						<input type="text" id="title" class="event-title" name="title" placeholder="Event Name"/>
-					</p><p>
-						<label for="description">Description</label>
-						<input type="text" id="description" class="event-description" name="description" placeholder="Description"/>
-					</p>
-					<p><input type="submit" value="Add" class="event-add" name="submit" id="submit"/></p>
-				</form>
+
 			<!-- 	<div class="col-sm-6">
 		        
 		        </div> -->
 		        <div class="format">
 		        	<% for(var i = 0; i < events.length; i++){ %>
-						<div class="event">
+						<div class="event" data-start="<%=events[i].start%>" data-end="<%=events[i].end%>" data-title="<%=events[i].title%>" data-description="<%=events[i].description%>">
 							<h4 class="editable-time"><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
 							<h3><%=events[i].title%></h3>
 							<p><%=events[i].description%></p>
 						</div>
 		        	<% } %>
 				</div>
-
-				<ul class="pagination">
-								  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate() %>">«</a></li>
-								  <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
-						<!-- 		  <li><a href="#">Yesterday</a></li>
-						 -->		  <li><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a></li>
-						<!-- 		  <li><a href="#">Tomorrow</a></li>
-						 -->		  <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+2) %>">»</a></li>
-								</ul>
-				
 			</div>
-					
+		<ul class="pagination">
+			<li class="prev-day"><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()-1) %>">«</a></li>
+		    <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
+		   <!-- <li><a href="#">Yesterday</a> -->
+		   </li>
+		   <li class="today"><a class="active" href="/agenda/<%= today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate() %>">Today</a>
+		   </li>
+		   <!-- <li><a href="#">Tomorrow</a></li>-->
+		 	<li class="next-day"><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()+1) %>">»</a>
+		 	</li>
+		</ul>
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/js/app.js"></script>
 
 </body>
 </html>
