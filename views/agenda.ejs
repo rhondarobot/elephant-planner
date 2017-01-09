@@ -39,7 +39,8 @@
 				  <!-- Modal content -->
 				  <div class="modal-content">
 				  <form method="post" action="/event" class="planner-notes hidden">
-				  	<input type="hidden" name="date" value="<%=date%>" />
+				  	<input type="hidden" name="date" id="date" value="<%=date%>" />
+				  	<input type="hidden" name="eventId" id="eventId" value="" />
 				  	<p>
 				    <span class="close">&times;</span>
 				    		<label for="start">Start Time:</label>
@@ -70,7 +71,8 @@
 		        </div> -->
 		        <div class="format">
 		        	<% for(var i = 0; i < events.length; i++){ %>
-						<div class="event" data-start="<%=events[i].start%>" data-end="<%=events[i].end%>" data-title="<%=events[i].title%>" data-description="<%=events[i].description%>">
+						<div class="event" data-id="<%=events[i].id%>" data-start="<%=events[i].start%>" data-end="<%=events[i].end%>" data-title="<%=events[i].title%>" data-description="<%=events[i].description%>">
+							<a href="#" class="delete-event">&times;</a>
 							<h4 class="editable-time"><a href='/agenda/today/<%=events[i].start%> - <%events[i].end%>'><%=events[i].start%> - <%=events[i].end%></a></h4>
 							<h3><%=events[i].title%></h3>
 							<p><%=events[i].description%></p>

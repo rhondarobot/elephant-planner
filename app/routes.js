@@ -54,8 +54,8 @@ module.exports = function(app, passport) {
 
     app.post('/event', function(req,res){
         getNote(req.user,req.body.date,function(note){
-            var newEvent = "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
-
+            var randomID = Math.floor((Math.random() * 99999999999) + 1);
+            var newEvent = "<li>"+randomID+" || " + req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
             var matches = note.content.match(/<ul(.*?)<\/ul>/g);
             if(matches){
                 var result = matches.map(function(val){
@@ -63,11 +63,42 @@ module.exports = function(app, passport) {
                 });
                 note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
             } else {
+                // 1 || 2300 - 2330 || Meet with Rhonda || On ScreenHero to complete EP
+                // 2 || 2300 - 2330 || Meet with Rhonda || On ScreenHero to complete EP
+                // 3 || 2300 - 2330 || Meet with Rhonda || On ScreenHero to complete EP
+                // 4 || 2300 - 2330 || Meet with Rhonda || On ScreenHero to complete EP
                 note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
             }
             saveNote(req.user,note, function(data){
                 console.log(data);
                 res.redirect('/agenda/'+req.body.date);
+            });
+        });
+    });
+
+    app.post('/edit-event', function(req,res){
+        getNote(req.user,req.body.date,function(note){
+            var id = req.body.eventId;
+            var newEvent = "<li>"+id+" || " + req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
+            var re = new RegExp("<li>"+id+"(.*?)<\/li>"); 
+            note.content = note.content.replace(re,newEvent);
+            console.log('id',id);
+            console.log('newEvent',newEvent);
+            console.log('re',re);
+            console.log('note.content',note.content);
+            saveNote(req.user,note, function(data){
+                res.redirect('/agenda/'+req.body.date);
+            });
+        });
+    });
+
+    app.delete('/event', function(req,res){
+        getNote(req.user,req.body.date,function(note){
+            var id = req.body.id;
+            var re = new RegExp("<li>"+id+"(.*?)<\/li>"); 
+            note.content = note.content.replace(re,"");
+            saveNote(req.user,note, function(data){
+                res.send({});
             });
         });
     });
@@ -95,7 +126,7 @@ module.exports = function(app, passport) {
     //     });
     // });
     app.get('/agenda/:date', isLoggedIn, function(req, res) {
-
+        console.log('here');
         getNote(req.user,req.params.date,function(note){
             var events = [];
             if(note.content){
@@ -103,12 +134,13 @@ module.exports = function(app, passport) {
                 for (var i = 0; i < lines.length; i++) {
                     if(lines[i]!==""){
                         var pieces = lines[i].split(" || ");
-                        var times = pieces[0].split(" - ");
+                        var times = pieces[1].split(" - ");
                         var event = {
+                            id: pieces[0],
                             start: times[0],
                             end: times[1],
-                            title: pieces[1],
-                            description: (pieces.length > 2) ? pieces[2] : ''
+                            title: pieces[2],
+                            description: (pieces.length > 2) ? pieces[3] : ''
                         };
                         events.push(event);
                     }
@@ -193,16 +225,20 @@ function saveNote(user,note,cb){
 }
 
 function getNote(user,date,cb){
+    console.log('228');
     var authenticatedClient = new Evernote.Client({
           token: user.token,
           sandbox: true,
           china: false,
         });
+    console.log('234');
     var noteStore = authenticatedClient.getNoteStore();
+    console.log('236');
     var todaysNote;
     var noteGUID = 0;
     var epGUID;
     noteStore.listNotebooks().then(function(notebooks) {
+        console.log('241');
         for (var i = 0; i < notebooks.length; i++) {
             if(notebooks[i].name == 'Evernote Planner'){
                 epGUID = notebooks[i].guid;
@@ -210,6 +246,7 @@ function getNote(user,date,cb){
         }
         return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
     }).then(function(notes){
+        console.log('249');
             for (var i = 0; i < notes.notes.length; i++) {
                 if(notes.notes[i].title == date){
                     noteGUID = notes.notes[i].guid;
@@ -221,6 +258,7 @@ function getNote(user,date,cb){
                 return noteStore.createNote({title:date,notebookGuid:epGUID,content:'<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note></en-note>'});
             }
     }).then(function(note){
+        console.log('261');
             cb(note);
     }).catch(function(error){
       console.error(error);

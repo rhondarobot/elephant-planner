@@ -138,7 +138,15 @@ label {
     text-align: center;
     width: 600px;
     border-radius: 5px;
-    margin: 20px 20%;
+    margin: 20px auto;
+    position: relative;
+}
+
+.event .delete-event {
+    position: absolute;
+    top: 5px; right: 5px;
+    text-decoration: none;
+    color: red;
 }
 
 .event h3 {
