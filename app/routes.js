@@ -149,22 +149,8 @@ module.exports = function(app, passport) {
                 // sort our events by start time
                 events.sort(keysrt('start'));
             }
-            // var btn = document.getElementByClassName('modal-btn-add'); 
-            //     btn.onclick = function() { 
-            //         modal.style.display = 'block'; 
-            //     }; 
-           
-            // var months = ['January','February','March','April','May','June','July',
-            // 'August','September','October','November','December'];       
-            // var tomorrow = new Date();
-            // tomorrow.setTime(tomorrow.getTime() + (1000*3600*24)); 
-            // var yesterday = new Date();
-            // yesterday.setTime(yesterday.getTime() - (1000*3600*24));
-            // document.getElementByClassName("tomorrow").innerHTML = months[tomorrow.getMonth()] + " " + tomorrow.getDate()+ ", " + tomorrow.getFullYear();
-            //     console.log(yesterday);
-            // document.getElementByClassName("yesterday").innerHTML = 
-            // months[yesterday.getMonth()] + " " + yesterday.getDate() + ", " + yesterday.getFullYear();
-            //     console.log(tomorrow);
+            
+            var dates = getDate(req.params.date);
 
             res.render('agenda.ejs', {
                 user : req.user,
@@ -179,6 +165,41 @@ module.exports = function(app, passport) {
             });
         });
 
+    });
+
+    app.get('/date/:date', function(req,res){
+        var dateRanges = [31,28,31,30,31,30,31,31,30,31,30,31];
+        // 0 - january, 1 - february, etc. 11 - december
+        var dates = {};
+        dates.today = new Date(req.params.date);
+        
+        var day = dates.today.getDate();
+        var month = dates.today.getMonth();
+        var year = dates.today.getFullYear();
+
+        console.log(year,month,day);
+        
+        if(day == 1){
+            if(month === 0){
+                dates.yesterday = new Date((year-1), 11, dateRanges[11]);
+            } else {
+                dates.yesterday = new Date(year, (month-1), dateRanges[(month-1)]);
+            }
+        } else {
+            dates.yesterday = new Date(year,month,(day-1));
+        }
+
+        if(day == dateRanges[month]){
+            if(month == 11){
+                dates.tomorrow = new Date((year+1), 0, 1);
+            } else {
+                dates.tomorrow = new Date(year, (month+1), 1);
+            }
+        } else {
+            dates.tomorrow = new Date(year,month,(day+1));
+        }
+        
+        res.send(dates);
     });
 
 
@@ -221,6 +242,10 @@ function saveNote(user,note,cb){
     noteStore.updateNote(note).then(function(data){
         cb(data);
     });
+
+}
+
+function getDate(today){
 
 }
 
