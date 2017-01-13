@@ -1,5 +1,6 @@
 // app/routes.js
 const Evernote = require('evernote');
+var moment = require('moment');
 // var ejsLint=require('./server.js');
 module.exports = function(app, passport) {
 
@@ -34,9 +35,10 @@ module.exports = function(app, passport) {
       passport.authenticate('evernote', { failureRedirect: '/' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        var day = new Date();
-        var today = day.getFullYear() + '-' + (day.getMonth()+1) + '-' + day.getDate();
-        res.redirect('/agenda/'+today);
+        // var day = new Date();
+        // var today = day.getFullYear() + '-' + (day.getMonth()+1) + '-' + day.getDate();
+        var dates = getDates();
+        res.redirect('/agenda/'+dates.today);
       });
 
     // =====================================
@@ -150,54 +152,48 @@ module.exports = function(app, passport) {
                 events.sort(keysrt('start'));
             }
             
-            var dates = getDate(req.params.date);
+            var dates = getDates(req.params.date);
 
             res.render('agenda.ejs', {
                 user : req.user,
                 note: note,
-                date: req.params.date,
-                yesterday: new Date(req.params.date),
-                today: new Date(),
-                // tomorrow: tomorrow,
-                // months: months,
-                events: events,
-                // btn: btn
+                dates: dates,
+                events: events
             });
         });
 
     });
 
-    app.get('/date/:date', function(req,res){
-        var dateRanges = [31,28,31,30,31,30,31,31,30,31,30,31];
-        // 0 - january, 1 - february, etc. 11 - december
+    function getDates(date){
+        date = (typeof date === 'undefined') ? moment() : date;
         var dates = {};
-        dates.today = new Date(req.params.date);
-        
-        var day = dates.today.getDate();
-        var month = dates.today.getMonth();
-        var year = dates.today.getFullYear();
+        var textFormat = 'MMMM Do YYYY';
+        var dateFormat = 'YYYY-M-D';
+        dates.today = moment(date).format(dateFormat);
+        dates.todayText = moment(date).format(textFormat);
+        dates.yesterdayText = moment(date).subtract(1, 'days').format(textFormat);
+        dates.yesterday = moment(date).subtract(1, 'days').format(dateFormat);
+        dates.tomorrowText = moment(date).add(1, 'days').format(textFormat);
+        dates.tomorrow = moment(date).add(1, 'days').format(dateFormat);
+        return dates;
+    }
 
-        console.log(year,month,day);
-        
-        if(day == 1){
-            if(month === 0){
-                dates.yesterday = new Date((year-1), 11, dateRanges[11]);
-            } else {
-                dates.yesterday = new Date(year, (month-1), dateRanges[(month-1)]);
-            }
-        } else {
-            dates.yesterday = new Date(year,month,(day-1));
-        }
+    app.get('/testdate', function(req,res){
+        res.send(getDates());
+    });
 
-        if(day == dateRanges[month]){
-            if(month == 11){
-                dates.tomorrow = new Date((year+1), 0, 1);
-            } else {
-                dates.tomorrow = new Date(year, (month+1), 1);
-            }
-        } else {
-            dates.tomorrow = new Date(year,month,(day+1));
-        }
+    app.get('/date/:date', function(req,res){
+        var date = req.params.date;
+        var dates = {};
+        var textFormat = 'MMMM Do YYYY';
+        var dateFormat = 'YYYY-M-D';
+        dates.today = moment(date).format(dateFormat);
+        dates.todayText = moment(date).format(textFormat);
+        dates.yesterdayText = moment(date).subtract(1, 'days').format(textFormat);
+        dates.yesterday = moment(date).subtract(1, 'days').format(dateFormat);
+        dates.tomorrowText = moment(date).add(1, 'days').format(textFormat);
+        dates.tomorrow = moment(date).add(1, 'days').format(dateFormat);
+        // return dates;
         
         res.send(dates);
     });
