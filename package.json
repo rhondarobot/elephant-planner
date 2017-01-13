@@ -19,6 +19,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "method-override": "^2.3.7",
+    "moment": "^2.17.1",
     "mongoose": "^4.7.1",
     "mongoose-find-one-or-create": "^0.2.0",
     "morgan": "^1.7.0",
