@@ -1,10 +1,9 @@
 .container-index {
-/*  background-image: url('/images/green.jpg'); */
-    background-image: url('/images/evernote-icon.png');
+    background-image: url('/images/evernote_icon.png');
     background-size: contain; 
-/*  background-repeat:no-repeat;
-    background-size: 15%; */
-/*  background-position: top 50% left 20px ;  */
+    background-repeat:space;
+    background-size: 15%; 
+    background-position: top 60% left  15%;  
     background-color: rgb(45,190,96);
     text-align: center;
     background-position: cover;
@@ -111,9 +110,9 @@ h1 {
 /*     background-image: url('/images/planner.jpg'); */
     background-size: cover;
     border-radius: 5px;
+    border:  rgba(0,0,0,0.5) solid;
     width: 80%;
     margin-left: 10%;
- 
 }
 
 .modal-btn-add {
@@ -125,6 +124,10 @@ h1 {
     color: rgb(5,144, 41);
     font-weight: 900;
     font-size: 13px;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 20px 2px rgba(255,255,255,1);
+    -moz-box-shadow: 0px 0px 20px 2px rgba(255,255,255,1);
+    box-shadow: 0px 0px 20px 2px rgba(255,255,255,1);
 }
 
 .planner-notes {
@@ -160,7 +163,8 @@ label {
     position: absolute;
     top: 5px; right: 5px;
     text-decoration: none;
-    color: red;
+    font-size: 30px;
+    color: rgb(255,255,255);
 }
 
 .event h3 {
