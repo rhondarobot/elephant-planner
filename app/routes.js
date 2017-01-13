@@ -28,7 +28,8 @@ module.exports = function(app, passport) {
     // =====================================
     // we will be using the code from the Evernote API
     app.get('/auth/evernote',
-      passport.authenticate('evernote'));
+      passport.authenticate('evernote')
+    );
 
     app.get('/auth/evernote/callback', 
       passport.authenticate('evernote', { failureRedirect: '/' }),
@@ -103,28 +104,30 @@ module.exports = function(app, passport) {
         });
     });
 
-    // app.post('/edit-event', function(req, res){
-    //     getNote(req.user,req.body.date,function(note){
-    //         // var editEvent = function{
-    //         //     for(var s = 0; s < req.body.start; s++) {
-    //         //         for(var e = 0; e < req.)
-    //         // }
-    //         // "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
+    app.post('/edit-event', function(req, res){
+        getNote(req.user,req.body.date,function(note){
+            // var editEvent = function{
+            //     for(var s = 0; s < req.body.start; s++) {
+            //         for(var e = 0; e < req.)
+            // }
+            // "<li>"+req.body.start+" - "+req.body.end+" || "+req.body.title+" || "+req.body.description+"</li>";
 
-    //         var matches = note.content.match(/<ul(.*?)<\/ul>/g);
-    //         if(matches){
-    //             var result = matches.map(function(val){
-    //                return val.replace(/<\/ul>/g,newEvent+'</ul>');
-    //             });
-    //             note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
-    //         } else {
-    //             note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
-    //         }
-    //     saveNote(req.user,note, function(data){
-    //         console.log(data);
-    //         res.redirect('/agenda/'+req.body.date);
-    //     });
-    // });
+            var matches = note.content.match(/<ul(.*?)<\/ul>/g);
+            if(matches){
+                var result = matches.map(function(val){
+                   return val.replace(/<\/ul>/g,newEvent+'</ul>');
+                });
+                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'+result[0]+'</en-note>';
+            } else {
+                note.content='<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><ul>'+newEvent+'</ul></en-note>';
+            }
+        });
+        saveNote(req.user,note, function(data){
+            console.log(data);
+            res.redirect('/agenda/'+req.body.date);
+        });
+    });
+
     app.get('/agenda/:date', isLoggedIn, function(req, res) {
         console.log('here');
         getNote(req.user,req.params.date,function(note){
@@ -150,7 +153,7 @@ module.exports = function(app, passport) {
                 events.sort(keysrt('start'));
             }
             
-            var dates = getDate(req.params.date);
+            // var dates = getDate(req.params.date);
 
             res.render('agenda.ejs', {
                 user : req.user,
@@ -179,28 +182,25 @@ module.exports = function(app, passport) {
 
         console.log(year,month,day);
         
+        dates.yesterday = new Date(year,month,(day-1));
         if(day == 1){
+            dates.yesterday = new Date(year, (month-1), dateRanges[(month-1)]);
             if(month === 0){
                 dates.yesterday = new Date((year-1), 11, dateRanges[11]);
-            } else {
-                dates.yesterday = new Date(year, (month-1), dateRanges[(month-1)]);
             }
-        } else {
-            dates.yesterday = new Date(year,month,(day-1));
         }
 
+        dates.tomorrow = new Date(year,month,(day+1));
         if(day == dateRanges[month]){
+            dates.tomorrow = new Date(year, (month+1), 1);
             if(month == 11){
                 dates.tomorrow = new Date((year+1), 0, 1);
-            } else {
-                dates.tomorrow = new Date(year, (month+1), 1);
             }
-        } else {
-            dates.tomorrow = new Date(year,month,(day+1));
         }
         
         res.send(dates);
     });
+
 
 
    
@@ -250,20 +250,16 @@ function getDate(today){
 }
 
 function getNote(user,date,cb){
-    console.log('228');
     var authenticatedClient = new Evernote.Client({
           token: user.token,
           sandbox: true,
           china: false,
         });
-    console.log('234');
     var noteStore = authenticatedClient.getNoteStore();
-    console.log('236');
     var todaysNote;
     var noteGUID = 0;
     var epGUID;
     noteStore.listNotebooks().then(function(notebooks) {
-        console.log('241');
         for (var i = 0; i < notebooks.length; i++) {
             if(notebooks[i].name == 'Evernote Planner'){
                 epGUID = notebooks[i].guid;
@@ -271,7 +267,6 @@ function getNote(user,date,cb){
         }
         return noteStore.findNotesMetadata({notebookGuid:epGUID},0,250,{includeTitle:true});            
     }).then(function(notes){
-        console.log('249');
             for (var i = 0; i < notes.notes.length; i++) {
                 if(notes.notes[i].title == date){
                     noteGUID = notes.notes[i].guid;
@@ -283,7 +278,6 @@ function getNote(user,date,cb){
                 return noteStore.createNote({title:date,notebookGuid:epGUID,content:'<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note></en-note>'});
             }
     }).then(function(note){
-        console.log('261');
             cb(note);
     }).catch(function(error){
       console.error(error);

@@ -81,7 +81,11 @@
 				</div>
 			</div>
 		<ul class="pagination">
-			<li class="prev-day"><a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()-1) %>">«</a></li>
+			<li class="prev-day">
+				<a href="/agenda/<%= yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + (yesterday.getDate()-1) %>">
+				«
+				</a>
+			</li>
 		    <!-- <li><a href="/agenda/<%= yesterday.getFullYear() + '-' + ('0'+(yesterday.getMonth()+1)).slice(-2) + '-' + ('0'+yesterday.getDate()).slice(-2) %>">«</a></li> -->
 		   <!-- <li><a href="#">Yesterday</a> -->
 		   </li>
