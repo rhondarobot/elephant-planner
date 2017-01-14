@@ -1,5 +1,8 @@
-var callbackUrl = "http://localhost:8080/oauth_callback"; // your endpoint
-
+if(process.env.NODE_ENV=='production'){
+  var callbackUrl = "https://fathomless-cliffs-20378.herokuapp.com/oauth_callback"; // your endpoint
+} else {
+  var callbackUrl = "http://localhost:8080/oauth_callback"; // your endpoint
+}
 // initialize OAuth
 var Evernote = require('evernote');
 var client = new Evernote.Client({

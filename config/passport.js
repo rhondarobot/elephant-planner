@@ -52,7 +52,7 @@ module.exports = function(passport) {
         userAuthorizationURL: 'https://sandbox.evernote.com/OAuth.action',
         consumerKey: 'rhonda-3605',
         consumerSecret: '47299cd28f534d36',
-        callbackURL: "http://localhost:8080/auth/evernote/callback"
+        callbackURL: (process.env.NODE_ENV=='production') ? "https://fathomless-cliffs-20378.herokuapp.com/auth/evernote/callback" : "http://localhost:8080/auth/evernote/callback"
     },
     function(token, tokenSecret, profile, cb) {
 
