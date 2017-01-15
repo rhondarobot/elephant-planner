@@ -189,10 +189,10 @@ module.exports = function(app, passport) {
         var dates = {};
         var textFormat = 'MMMM Do YYYY';
         var dateFormat = 'YYYY-M-D';
-        dates.today = moment(date).calendar().format(dateFormat);
-        dates.todayText = moment(date).format(textFormat);
         dates.yesterdayText = moment(date).subtract(1, 'days').format(textFormat);
         dates.yesterday = moment(date).subtract(1, 'days').format(dateFormat);
+        dates.today = new Date(req.params.date).format(dateFormat);
+        dates.todayText = moment(date).format(textFormat);
         dates.tomorrowText = moment(date).add(1, 'days').format(textFormat);
         dates.tomorrow = moment(date).add(1, 'days').format(dateFormat);
         // return dates;        

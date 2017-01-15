@@ -53,7 +53,7 @@ $(document).ready(function(){
 		$('#myModal').show();
 	});
 
-	$('.today').click(function(e){
+	$('.today a').click(function(e){
 		e.preventDefault;
 	})
 });
