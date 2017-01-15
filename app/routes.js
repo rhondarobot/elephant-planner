@@ -171,7 +171,9 @@ module.exports = function(app, passport) {
         var dates = {};
         var textFormat = 'MMMM Do YYYY';
         var dateFormat = 'YYYY-M-D';
+        console.log(date + '174');
         dates.today = moment(date).format(dateFormat);
+        console.log(dates.today + '176');
         dates.todayText = moment(date).format(textFormat);
         dates.yesterdayText = moment(date).subtract(1, 'days').format(textFormat);
         dates.yesterday = moment(date).subtract(1, 'days').format(dateFormat);

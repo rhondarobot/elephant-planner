@@ -52,4 +52,8 @@ $(document).ready(function(){
 		$('#overlay').show();
 		$('#myModal').show();
 	});
+
+	$('.today').click(function(e){
+		e.preventDefault;
+	})
 });
