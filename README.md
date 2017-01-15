@@ -1,12 +1,12 @@
 # Evernote-Planner
 
-#### Combining the capabilities of Evernote and adding a planner feature to keep track of tasks and events. ![Evernote Icon](/views/images/evernote_app_icon.png)
+#### Combining the capabilities of Evernote and adding a planner feature to keep track of tasks and events. ![Evernote Icon](/views/images/evernote_app_icon.jpg)
 
 ###Keep it all in ONE place
 
-![Agenda View](/views/images/evernote_agenda_view.png)
+![Agenda View](/views/images/evernote_agenda_view.jpg)
 
-![Adding Event](/views/images/adding_event.png)
+![Adding Event](/views/images/adding_event.jpg)
 
 1. Create a notebook called 'Evernote Planner'
 2. Visit https://fathomless-cliffs-20378.herokuapp.com/
